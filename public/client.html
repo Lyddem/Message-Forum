@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> JQuery Exercise </title>
+  <link rel="stylesheet" type="text/css" href="styles.css" />
+
+</head>
+<body>
+  <h1>Message Forum </h1>
+
+  <form class="new-chat">
+
+  	Author <input type="text" name="author" id="author"/><br /><br />
+  	Message <textarea name="message"></textarea> 
+  	<button type="submit" value="submit"> Submit </button><br /><br />
+  </form>
+
+  <div class="chats"></div>
+
+
+	<script src="https://code.jquery.com/jquery-2.2.0.js"></script>
+	<script type="text/javascript">
+
+  //on submit
+  $('form.new-chat').on('submit', function (e) {
+  	e.preventDefault();
+
+  	var form = this;
+
+  	var payload = JSON.stringify({
+  		name: form.author.value,
+  		message: form.message.value
+  	})
+
+  	//POST to /chats
+  	$.ajax({
+  		type:'POST',
+  		url: '/chats',
+  		contentType: 'application/json',
+  		data: payload, //data must always be a string
+  	})
+  		.then(function(){
+  			//clear input fields
+  			form.author.value = '',
+  			form.message.value = ''
+  	});
+
+  	$.ajax({
+  		type: 'GET',
+  		url: '/chats',
+  		contentType: 'application/json',
+  		success: function(data) {
+  			console.log('successful get to server!');
+  		},
+  		error: function(err) {
+  			console.log('error', err)
+  		}
+  	})
+  	.then(function (chats) { 
+  		var last = chats.length-1;
+  		$('.chats').prepend("<strong>author</strong>: " + chats[last].name + ' ' + "<strong>message:</strong> " + chats[last].message + "<br /><br />");
+  	})
+  })
+
+  </script>
+ </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
