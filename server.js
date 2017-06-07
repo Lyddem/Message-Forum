@@ -1,4 +1,5 @@
 var bodyParser = require('body-parser');
+var db = require('../database.js');
 var express = require('express');
 var path = require('path');
 var app = express();
@@ -7,6 +8,7 @@ app.use(bodyParser.json());
 
 var chats = [];
 
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function(req,res) {
@@ -14,7 +16,7 @@ app.get('/', function(req,res) {
 })
 
 app.post('/chats', function(req,res) {
-	chats.push(req.body);
+	// chats.push(req.body);
 	res.send(req.body).status(200);
 })
 
